@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Button, View, Text } from 'react-native';
+import { StyleSheet, ScrollView, ActivityIndicator, View } from 'react-native';
+import { List, ListItem } from 'react-native-elements';
 
 class HomeScreen extends Component {
     static navigationOptions = {
@@ -15,29 +16,66 @@ class HomeScreen extends Component {
         return fetch('https://raw.githubusercontent.com/openfootball/world-cup.json/master/2018/worldcup.json')
         .then((res) => res.json())
         .then((resJson) => {
-            console.log(resJson)
+            // console.log(resJson)
             this.setState({
                 isLoading: false,
                 dataSource: resJson.rounds
             }, function() {
 
-            })
+            });
         })
-        .catch((err) => {
-            console.error(err)
-        })
+        .catch((error) => {
+            console.error(error);
+        });
     }
 
     render() {
-        return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        if (this.state.isLoading) {
 
-                <Text>Home Screen</Text>
+            return(
+                <View style={styles.activity}>
+                    <ActivityIndicator />
+                </View>
+            );
+        }
 
-                <Button title="Go to Details" onPress={() => this.props.navigation.navigate('Details')} />
-            </View>
-        );
+        return(
+            <ScrollView style={styles.container}>
+                <List>
+                    {
+                        this.state.dataSource.map((item, i) => (
+                            <ListItem
+                                key={i}
+                                title={item.name}
+                                leftIcon={{name: 'soccer-ball-o', type: 'font-awesome'}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Details', {
+                                        matches: `${JSON.stringify(item.matches)}`,
+                                    });
+                                }}
+                            />
+                        ))
+                    }
+                </List>
+            </ScrollView>
+        )
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingBottom: 22
+    },
+    item: {
+        padding: 10,
+        fontSize: 18,
+        height: 44,
+    },
+    activity: {
+        flex: 1,
+        padding: 20,
+    }
+})
 
 export default HomeScreen;
