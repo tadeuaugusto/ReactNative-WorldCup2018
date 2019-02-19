@@ -6,6 +6,28 @@ class HomeScreen extends Component {
         title: 'Home',
     };
 
+    constructor(props) {
+        super(props);
+        this.state = { isLoading: true }
+    }
+
+    componentDidMount() {
+        return fetch('https://raw.githubusercontent.com/openfootball/world-cup.json/master/2018/worldcup.json')
+        .then((res) => res.json())
+        .then((resJson) => {
+            console.log(resJson)
+            this.setState({
+                isLoading: false,
+                dataSource: resJson.rounds
+            }, function() {
+
+            })
+        })
+        .catch((err) => {
+            console.error(err)
+        })
+    }
+
     render() {
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
