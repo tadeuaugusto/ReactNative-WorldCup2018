@@ -7,11 +7,8 @@
  * @lint-ignore-every XPLATJSCOPYRIGHT1
  */
 
-import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 import HomeScreen from './components/HomeScreen';
-import DetaisScreen from './components/DetailsScreen';
 import DetailsScreen from './components/DetailsScreen';
 
 const RootStack = createStackNavigator(
@@ -33,9 +30,6 @@ const RootStack = createStackNavigator(
   }
 )
 
-// export default class App extends React, Component {
-export default class App extends Component {
-  render() {
-    return <RootStack />
-  }
-}
+const App = createAppContainer(RootStack);
+
+export default App;
